@@ -46,5 +46,5 @@ if __name__ == '__main__':
     print("Starting Emergency Rating Calculator...")
     print("Available at: http://localhost:5000")
     print("API endpoints at: http://localhost:5000/api/thermal/")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5555, debug=True)
 
