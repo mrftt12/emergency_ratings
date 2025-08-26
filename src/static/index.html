@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Rating Calculator - Underground Power Cables</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-bolt logo-icon"></i>
+                    <h1 class="app-title">Emergency Rating Calculator</h1>
+                    <span class="app-subtitle">IEC 60853-2 Compliant</span>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="helpBtn">
+                        <i class="fas fa-question-circle"></i>
+                        Help
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Navigation Tabs -->
+            <nav class="tab-navigation">
+                <button class="tab-btn active" data-tab="emergency-rating">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Emergency Rating
+                </button>
+                <button class="tab-btn" data-tab="conductor-temp">
+                    <i class="fas fa-thermometer-half"></i>
+                    Conductor Temperature
+                </button>
+                <button class="tab-btn" data-tab="transient-analysis">
+                    <i class="fas fa-chart-line"></i>
+                    Transient Analysis
+                </button>
+                <button class="tab-btn" data-tab="radial-temp">
+                    <i class="fas fa-bullseye"></i>
+                    Radial Temperature
+                </button>
+            </nav>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Emergency Rating Tab -->
+                <div class="tab-panel active" id="emergency-rating">
+                    <div class="panel-header">
+                        <h2>Emergency Current Rating</h2>
+                        <p>Calculate maximum permissible emergency current for specified duration</p>
+                    </div>
+                    
+                    <div class="content-grid">
+                        <div class="input-section">
+                            <div class="card">
+                                <h3>Cable Configuration</h3>
+                                <div class="form-group">
+                                    <label for="cableType">Cable Type</label>
+                                    <select id="cableType" class="form-control">
+                                        <option value="132kV_XLPE">132kV XLPE Cable</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="initialCurrent">Initial Current (A)</label>
+                                        <input type="number" id="initialCurrent" class="form-control" value="800" min="0" step="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="emergencyDuration">Duration (hours)</label>
+                                        <input type="number" id="emergencyDuration" class="form-control" value="6" min="0.17" step="0.1">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="maxTemperature">Max Temperature (°C)</label>
+                                        <input type="number" id="maxTemperature" class="form-control" value="90" min="20" max="150">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ambientTemp">Ambient Temperature (°C)</label>
+                                        <input type="number" id="ambientTemp" class="form-control" value="20" min="-20" max="50">
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-primary" id="calculateEmergencyBtn">
+                                    <i class="fas fa-calculator"></i>
+                                    Calculate Emergency Rating
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="results-section">
+                            <div class="card results-card" id="emergencyResults">
+                                <h3>Results</h3>
+                                <div class="results-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">Emergency Current</span>
+                                        <span class="result-value" id="emergencyCurrentResult">-</span>
+                                        <span class="result-unit">A</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Scaling Factor</span>
+                                        <span class="result-value" id="scalingFactorResult">-</span>
+                                        <span class="result-unit">×</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Initial Temperature</span>
+                                        <span class="result-value" id="initialTempResult">-</span>
+                                        <span class="result-unit">°C</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">IEC Compliance</span>
+                                        <span class="result-value" id="iecComplianceResult">-</span>
+                                        <span class="result-unit"></span>
+                                    </div>
+                                </div>
+                                <div class="compliance-indicator" id="complianceIndicator">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Calculate to see IEC 60853-2 compliance status</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conductor Temperature Tab -->
+                <div class="tab-panel" id="conductor-temp">
+                    <div class="panel-header">
+                        <h2>Conductor Temperature</h2>
+                        <p>Calculate steady-state conductor temperature for given current</p>
+                    </div>
+                    
+                    <div class="content-grid">
+                        <div class="input-section">
+                            <div class="card">
+                                <h3>Input Parameters</h3>
+                                <div class="form-group">
+                                    <label for="conductorCurrent">Current (A)</label>
+                                    <input type="number" id="conductorCurrent" class="form-control" value="1000" min="0" step="10">
+                                </div>
+                                <div class="form-group">
+                                    <label for="conductorAmbient">Ambient Temperature (°C)</label>
+                                    <input type="number" id="conductorAmbient" class="form-control" value="20" min="-20" max="50">
+                                </div>
+                                <button class="btn btn-primary" id="calculateTempBtn">
+                                    <i class="fas fa-thermometer-half"></i>
+                                    Calculate Temperature
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="results-section">
+                            <div class="card results-card" id="tempResults">
+                                <h3>Temperature Results</h3>
+                                <div class="temp-display">
+                                    <div class="temp-gauge">
+                                        <div class="gauge-container">
+                                            <div class="gauge-fill" id="tempGaugeFill"></div>
+                                            <div class="gauge-text">
+                                                <span class="temp-value" id="tempValue">--</span>
+                                                <span class="temp-unit">°C</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="temp-details">
+                                        <div class="detail-item">
+                                            <span class="detail-label">Temperature Rise</span>
+                                            <span class="detail-value" id="tempRiseValue">-</span>
+                                            <span class="detail-unit">°C</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Conductor Losses</span>
+                                            <span class="detail-value" id="lossesValue">-</span>
+                                            <span class="detail-unit">W/m</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transient Analysis Tab -->
+                <div class="tab-panel" id="transient-analysis">
+                    <div class="panel-header">
+                        <h2>Transient Thermal Analysis</h2>
+                        <p>Analyze temperature evolution during emergency loading</p>
+                    </div>
+                    
+                    <div class="content-grid">
+                        <div class="input-section">
+                            <div class="card">
+                                <h3>Analysis Parameters</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="transientInitial">Initial Current (A)</label>
+                                        <input type="number" id="transientInitial" class="form-control" value="800" min="0" step="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="transientEmergency">Emergency Current (A)</label>
+                                        <input type="number" id="transientEmergency" class="form-control" value="1500" min="0" step="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="transientDuration">Duration (hours)</label>
+                                    <input type="number" id="transientDuration" class="form-control" value="24" min="0.17" step="0.1">
+                                </div>
+                                <button class="btn btn-primary" id="calculateTransientBtn">
+                                    <i class="fas fa-chart-line"></i>
+                                    Run Transient Analysis
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="results-section">
+                            <div class="card chart-card">
+                                <h3>Temperature Evolution</h3>
+                                <div class="chart-container">
+                                    <canvas id="transientChart"></canvas>
+                                </div>
+                                <div class="chart-legend">
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background: #3b82f6;"></div>
+                                        <span>Conductor Temperature</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Radial Temperature Tab -->
+                <div class="tab-panel" id="radial-temp">
+                    <div class="panel-header">
+                        <h2>Radial Temperature Distribution</h2>
+                        <p>Visualize temperature profile across cable cross-section</p>
+                    </div>
+                    
+                    <div class="content-grid">
+                        <div class="input-section">
+                            <div class="card">
+                                <h3>Analysis Parameters</h3>
+                                <div class="form-group">
+                                    <label for="radialCurrent">Current (A)</label>
+                                    <input type="number" id="radialCurrent" class="form-control" value="1200" min="0" step="10">
+                                </div>
+                                <div class="form-group">
+                                    <label for="radialAmbient">Ambient Temperature (°C)</label>
+                                    <input type="number" id="radialAmbient" class="form-control" value="20" min="-20" max="50">
+                                </div>
+                                <button class="btn btn-primary" id="calculateRadialBtn">
+                                    <i class="fas fa-bullseye"></i>
+                                    Calculate Distribution
+                                </button>
+                            </div>
+                            
+                            <div class="card">
+                                <h3>Cable Cross-Section</h3>
+                                <div class="cable-diagram" id="cableDiagram">
+                                    <div class="cable-layer conductor">
+                                        <span class="layer-label">Conductor</span>
+                                    </div>
+                                    <div class="cable-layer insulation">
+                                        <span class="layer-label">Insulation</span>
+                                    </div>
+                                    <div class="cable-layer sheath">
+                                        <span class="layer-label">Sheath</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="results-section">
+                            <div class="card chart-card">
+                                <h3>Radial Temperature Profile</h3>
+                                <div class="chart-container">
+                                    <canvas id="radialChart"></canvas>
+                                </div>
+                                <div class="temperature-scale">
+                                    <div class="scale-label">Temperature Scale</div>
+                                    <div class="scale-gradient"></div>
+                                    <div class="scale-values">
+                                        <span id="minTempScale">20°C</span>
+                                        <span id="maxTempScale">80°C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Calculating...</p>
+            </div>
+        </div>
+
+        <!-- Help Modal -->
+        <div class="modal-overlay" id="helpModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>Emergency Rating Calculator Help</h3>
+                    <button class="modal-close" id="closeHelpModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="help-section">
+                        <h4>About This Calculator</h4>
+                        <p>This application calculates emergency thermal ratings for underground power cables according to IEC 60853-2 standard. It provides comprehensive thermal analysis including emergency current ratings, conductor temperature calculations, transient thermal analysis, and radial temperature distribution visualization.</p>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h4>Key Features</h4>
+                        <ul>
+                            <li><strong>Emergency Rating:</strong> Calculate maximum permissible current for specified emergency duration</li>
+                            <li><strong>Conductor Temperature:</strong> Determine steady-state conductor temperature for given current</li>
+                            <li><strong>Transient Analysis:</strong> Analyze temperature evolution during emergency loading</li>
+                            <li><strong>Radial Temperature:</strong> Visualize temperature distribution across cable cross-section</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h4>IEC 60853-2 Compliance</h4>
+                        <p>The calculator implements the thermal models and calculation methods specified in IEC 60853-2. Emergency ratings are limited to 2.5 times the rated current as per the standard requirements.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
