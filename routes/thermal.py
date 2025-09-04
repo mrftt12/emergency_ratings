@@ -7,8 +7,8 @@ API endpoints for emergency rating calculations
 
 from flask import Blueprint, request, jsonify
 import numpy as np
-from src.thermal_engine import ThermalNetwork, EmergencyRatingCalculator, RadialTemperatureCalculator
-from src.cable_library import get_cable_library
+from thermal_engine import ThermalNetwork, EmergencyRatingCalculator, RadialTemperatureCalculator
+from cable_library import get_cable_library
 
 thermal_bp = Blueprint('thermal', __name__)
 

@@ -14,7 +14,7 @@ from flask import Flask, send_from_directory
 from flask_cors import CORS
 
 # Import thermal routes
-from src.routes.thermal import thermal_bp
+from routes.thermal import thermal_bp
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 app.config['SECRET_KEY'] = 'emergency_rating_calculator_secret_key'
