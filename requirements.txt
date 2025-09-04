@@ -5,3 +5,4 @@ numpy
 scipy
 sqlalchemy
 flask_sqlalchemy
+flask_socketio
