@@ -54,6 +54,6 @@ if __name__ == '__main__':
     print("Available at: http://localhost:5000")
     print("API endpoints at: http://localhost:5000/api/thermal/")
 
-    socketio.run(app, debug=False, port=80, allow_unsafe_werkzeug=True) # Starts the server
+    socketio.run(app, debug=False, port=5000, allow_unsafe_werkzeug=True) # Starts the server
     #app.run(host='0.0.0.0', port=5555, debug=True)
 
